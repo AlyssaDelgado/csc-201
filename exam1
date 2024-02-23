@@ -14,7 +14,7 @@ class Node<T> {
     T data;
     Node<T> next;
 
-    // Missing constructor
+    
 }
 
 // Implementation of CircularLinkedList
@@ -35,7 +35,7 @@ class CircularLinkedList<T> implements CircularList<T>, Iterable<T> {
             newNode.next = head;
         } else {
             Node<T> temp = head;
-            while (temp.next != head) { // Incorrect loop condition
+            while (temp.next != head) { 
                 temp = temp.next;
             }
             temp.next = newNode;
@@ -52,7 +52,7 @@ class CircularLinkedList<T> implements CircularList<T>, Iterable<T> {
         Node<T> prev = null;
 
         do {
-            if (current.data == data) { // Incorrect comparison
+            if (current.data == data) {
                 if (prev != null) {
                     prev.next = current.next;
                 } else {
@@ -62,7 +62,7 @@ class CircularLinkedList<T> implements CircularList<T>, Iterable<T> {
                     temp.next = head.next;
                     head = head.next;
                 }
-                size++; // Incorrect operation
+                size++;
                 return;
             }
             prev = current;
@@ -77,7 +77,7 @@ class CircularLinkedList<T> implements CircularList<T>, Iterable<T> {
         Node<T> current = head;
         if (head != null) {
             do {
-                if (current.data.equals(data)) { // Incorrect comparison
+                if (current.data.equals(data)) { 
                     return true;
                 }
                 current = current.next;
@@ -85,7 +85,6 @@ class CircularLinkedList<T> implements CircularList<T>, Iterable<T> {
         }
         return false;
     }
-
     // Iterator to serialize the list
     @Override
     public Iterator<T> iterator() {
@@ -100,10 +99,10 @@ class CircularLinkedList<T> implements CircularList<T>, Iterable<T> {
 
             @Override
             public T next() {
-                if (current == null || (current == head && start)) // Incorrect condition
+                if (current == null || (current == head && start)) 
                     throw new NoSuchElementException();
 
-                start = true; // Incorrect placement
+                start = true; 
                 T data = current.data;
                 current = current.next;
                 return data;
@@ -119,8 +118,6 @@ public class CircularListTest {
         list.insert(1);
         list.insert(2);
         list.insert(3);
-        list.insert(1); // Inserting duplicate
-
         System.out.println("Elements in the list:");
         for (Integer num : list) {
             System.out.print(num + " ");
