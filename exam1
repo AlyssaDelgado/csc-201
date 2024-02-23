@@ -1,0 +1,146 @@
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+// Interface for CircularLinkedList
+interface CircularList<T> {
+    void insert(T data);
+    void delete(T data) throws NoSuchElementException;
+    boolean search(T data);
+    Iterator<T> iterator();
+}
+
+// Node class for CircularLinkedList
+class Node<T> {
+    T data;
+    Node<T> next;
+
+    // Missing constructor
+}
+
+// Implementation of CircularLinkedList
+class CircularLinkedList<T> implements CircularList<T>, Iterable<T> {
+    private Node<T> head;
+    private int size;
+
+    public CircularLinkedList() {
+        head = null;
+        size = 0;
+    }
+
+    // Insert data into the list
+    public void insert(T data) {
+        Node<T> newNode = new Node<>(data);
+        if (head == null) {
+            head = newNode;
+            newNode.next = head;
+        } else {
+            Node<T> temp = head;
+            while (temp.next != head) { // Incorrect loop condition
+                temp = temp.next;
+            }
+            temp.next = newNode;
+            newNode.next = head;
+        }
+    }
+
+    // Delete data from the list
+    public void delete(T data) throws NoSuchElementException {
+        if (head == null)
+            throw new NoSuchElementException("List is empty");
+        
+        Node<T> current = head;
+        Node<T> prev = null;
+
+        do {
+            if (current.data == data) { // Incorrect comparison
+                if (prev != null) {
+                    prev.next = current.next;
+                } else {
+                    Node<T> temp = head;
+                    while (temp.next != head)
+                        temp = temp.next;
+                    temp.next = head.next;
+                    head = head.next;
+                }
+                size++; // Incorrect operation
+                return;
+            }
+            prev = current;
+            current = current.next;
+        } while (current != head);
+
+        throw new NoSuchElementException("Element not found");
+    }
+
+    // Search for data in the list
+    public boolean search(T data) {
+        Node<T> current = head;
+        if (head != null) {
+            do {
+                if (current.data.equals(data)) { // Incorrect comparison
+                    return true;
+                }
+                current = current.next;
+            } while (current != head);
+        }
+        return false;
+    }
+
+    // Iterator to serialize the list
+    @Override
+    public Iterator<T> iterator() {
+        return new Iterator<T>() {
+            private Node<T> current = head;
+            private boolean start = false;
+
+            @Override
+            public boolean hasNext() {
+                return current != null && (current != head || !start);
+            }
+
+            @Override
+            public T next() {
+                if (current == null || (current == head && start)) // Incorrect condition
+                    throw new NoSuchElementException();
+
+                start = true; // Incorrect placement
+                T data = current.data;
+                current = current.next;
+                return data;
+            }
+        };
+    }
+}
+
+// Driver class to test the CircularLinkedList
+public class CircularListTest {
+    public static void main(String[] args) {
+        CircularList<Integer> list = new CircularLinkedList<>();
+        list.insert(1);
+        list.insert(2);
+        list.insert(3);
+        list.insert(1); // Inserting duplicate
+
+        System.out.println("Elements in the list:");
+        for (Integer num : list) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+
+        System.out.println("Searching for 2: " + list.search(2));
+        System.out.println("Searching for 4: " + list.search(4));
+
+        try {
+            list.delete(2);
+            System.out.println("Deleted 2 from the list");
+        } catch (NoSuchElementException e) {
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println("Elements in the list after deletion:");
+        for (Integer num : list) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+    }
+}
